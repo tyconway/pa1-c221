@@ -158,7 +158,8 @@ public:
 template <class T>
 struct Node
 {
-	Node<T>* next;
+    Node<T>* up;
+    Node<T>* down;
 	T data;
 	Node() {}
 	Node(T e)
@@ -178,7 +179,7 @@ public:
 	}
 	~LinkedListStack()
 	{
-		// TODO
+		delete head;
 	}
 	bool isEmpty()
 	{
@@ -191,26 +192,51 @@ public:
 	}
 	T top()
 	{
-
+        return head->down->data;
 	}
+    T pop()
+    {
+        if (isEmpty()) { throw EmptyStack(); }
+
+        Node<T>* popped = head->down;
+        T poppedData = popped->data;
+
+        // if final node
+        if (count == 1)
+        {
+            delete popped;
+            head->down = nullptr;
+            count -= 1;
+            return poppedData;
+        }
+
+        // if not the final node
+        Node<T>* newTop = popped->down;
+        head->down = newTop;
+        newTop->up = head;
+        delete popped;
+        count -= 1;
+        return poppedData;
+    }
 	void push(T e)
 	{
 		Node<T>* added = new Node<T>(e);
-		added->next = nullptr;
+		added->down = nullptr;
 		
 		// if list is empty
 		if (isEmpty())
 		{
-			head->next = added;
+			head->down = added;
+            added->up = head;
 			count += 1;
 			return;
 		}
 		// if list is not empty
-		// set the head's next to the added 
-		// head->added;
-		Node<T>* curr = head->next; // the top element
-		curr->next = added;
-		head->next = added;
+		Node<T>* curr = head->down; // the top element
+        added->up = head;
+        added->down = curr;
+        curr->up = added;
+        head->down = added;
 		count += 1;
 	}
 };
@@ -246,7 +272,15 @@ int main()
 		llStack.push(1);
 		llStack.push(2);
 		llStack.push(4);
-		cout << "\nLinkedListStack: " << llStack.isEmpty() << endl;
+		cout << "\nLinkedListStack: " << llStack.top() << endl;
+        cout << "Popped: " << llStack.pop() << endl;
+		cout << "\nLinkedListStack: " << llStack.top() << endl;
+        cout << "Popped: " << llStack.pop() << endl;
+		cout << "\nLinkedListStack: " << llStack.top() << endl;
+        cout << "Popped: " << llStack.pop() << endl;
+        cout << llStack.isEmpty() << endl;
+
+        cout << endl;
 	}
 	catch (const exception& e)
 	{
