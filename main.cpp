@@ -33,7 +33,7 @@ public:
 };
 
 template <class T>
-class ArrayStack 
+class ArrayStack : public AbstractStack<T>
 {
     T* stack; // array
     int topIndex = -1;
@@ -46,6 +46,10 @@ public:
         capacity = initialCapacity;
         constant = growthConstant;
         stack = new T[capacity];
+    }
+    ~ArrayStack()
+    {
+        delete [] stack;
     }
     bool isEmpty() 
     {
@@ -93,7 +97,7 @@ public:
 };
 
 template <class T>
-class DoublingArrayStack : public ArrayStack<T>
+class DoublingArrayStack : public AbstractStack<T>
 {
     T* stack;
     int topIndex = -1;
@@ -106,7 +110,7 @@ public:
     }
     ~DoublingArrayStack()
     {
-        // TODO
+        delete [] stack;
     }
     bool isEmpty() 
     {
@@ -152,6 +156,55 @@ public:
     }
 };
 
+template <class T>
+struct Node
+{
+    Node<T>* next;
+    T data;
+    Node(T e)
+    {
+        data = e;
+    }
+};
+
+template <class T>
+class LinkedListStack : public AbstractStack<T>
+{
+    // Node<T>* top;
+    int count = 0;
+public:
+    LinkedListStack() {}
+    ~LinkedListStack() {}
+    bool isEmpty() 
+    {
+        if (count == 0) { return true; }
+        return false;
+    }
+    int size() 
+    {
+        return count;
+    }
+    T top()
+    {
+
+    }
+    void push(T e)
+    {
+        Node<T>* added = new Node<T>(e);
+        // added->next = nullptr;
+        count += 1;
+        // if list is empty
+        if (isEmpty())
+        {
+            // top = added;
+            return;
+        }
+        // if list is not empty
+        // set the head's next to the added 
+        // head->added;
+    }
+};
+
 int main() 
 {
     // Request: reduce CPU use (vagrant?)
@@ -175,6 +228,10 @@ int main()
         }
         cout << "Popped: " << doubStack.pop() << endl;
         cout << doubStack.size() << endl;
+
+        LinkedListStack<int> llStack;
+        llStack.push(2);
+        cout << "LinkedListStack: " << llStack.isEmpty() << endl;
     }
     catch(const exception& e)
     {
