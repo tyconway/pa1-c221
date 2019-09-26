@@ -1,8 +1,8 @@
-run : 
-	./a.out
-
-g : 
+build :
 	g++ main.cpp
+
+r : 
+	./a.out
 
 clean :
 	rm ./logs/*
