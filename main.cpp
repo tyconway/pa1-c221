@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <iomanip>
 
 using namespace std;
 
@@ -70,6 +72,7 @@ public:
 	}
 	T pop()
 	{
+		if (isEmpty()) { throw EmptyStack(); }
 		T popped = stack[topIndex];
 		topIndex -= 1;
 		return popped;
@@ -130,6 +133,7 @@ public:
 	}
 	T pop()
 	{
+		if (isEmpty()) { throw EmptyStack(); }
 		T popped = stack[topIndex];
 		topIndex -= 1;
 		return popped;
@@ -192,6 +196,7 @@ public:
 	}
 	T top()
 	{
+		if (isEmpty()) { throw EmptyStack(); }
         return head->down->data;
 	}
     T pop()
@@ -248,37 +253,53 @@ int main()
 	// Extra Credit: alternate structures and analysis
 	try
 	{
-		int testCount = 0;
+        // Getting times into CSV
+        // Opt 1: Inner
+        // In each for loop, every 1000 operations or so, write elapsed time to CSV.
+        // Consid: would involve extra operation, though potentially negligible.
 
-		// ArrayStack<int> arrStack(1000, 100);
-		// for (int i = 1; i <= testCount; i++)
-		// {
-		//     arrStack.push(i);
-		//     printf("[%i, %i]\n", arrStack.top(), arrStack.size());
-		// }
-		// cout << "Pop: " << arrStack.pop() << endl;
+        // Opt 2: Outer
+        // Wrap entire test sweet in a for loop that increments test count by 1000 increments,
+        // writing to a file the elapsed times each loop like it's writing to console right now.
+        // Consid: multiplies the calls to chrono, unsure if that's an issue.
 
-		// DoublingArrayStack<double> doubStack(100);
-		// cout << "\nDoublingArrayStack:\n";
-		// for (int i = 1; i <= testCount; i++)
-		// {
-		//     doubStack.push(i);
-		//     printf("[%f, %i]\n", doubStack.top(), doubStack.size());
-		// }
-		// cout << "Popped: " << doubStack.pop() << endl;
-		// cout << doubStack.size() << endl;
+        // Opt 3: Compare
+        // Do both in different branches and compare differences.
+
+		int testCount = 500000;
+
+		ArrayStack<int> arrStack(1000, 100);
+        auto startAS = chrono::high_resolution_clock::now();
+		for (int i = 1; i <= testCount; i++)
+		{
+		    arrStack.push(i);
+		}
+        auto finishAS = chrono::high_resolution_clock::now();
+
+		DoublingArrayStack<double> doubStack(100);
+        auto startDAS = chrono::high_resolution_clock::now();
+		for (int i = 1; i <= testCount; i++)
+		{
+		    doubStack.push(i);
+		}
+        auto finishDAS = chrono::high_resolution_clock::now();
 
 		LinkedListStack<int> llStack;
-		llStack.push(1);
-		llStack.push(2);
-		llStack.push(4);
-		cout << "\nLinkedListStack: " << llStack.top() << endl;
-        cout << "Popped: " << llStack.pop() << endl;
-		cout << "\nLinkedListStack: " << llStack.top() << endl;
-        cout << "Popped: " << llStack.pop() << endl;
-		cout << "\nLinkedListStack: " << llStack.top() << endl;
-        cout << "Popped: " << llStack.pop() << endl;
-        cout << llStack.isEmpty() << endl;
+        auto startLLS = chrono::high_resolution_clock::now();
+		for (int i = 1; i <= testCount; i++)
+		{
+		    llStack.push(i);
+		}
+        auto finishLLS = chrono::high_resolution_clock::now();
+
+        // convert nanoseconds (1e-9) to seconds
+        double secondsDenominator = 1000000000; 
+        auto elapsedAS = (finishAS - startAS)/secondsDenominator;
+        auto elapsedDAS = (finishDAS - startDAS)/secondsDenominator;
+        auto elapsedLLS = (finishLLS - startLLS)/secondsDenominator;
+		cout << "\nArrayStack:         " << elapsedAS.count() << endl;
+		cout << "\nDoublingArrayStack: " << elapsedDAS.count() << endl;
+		cout << "\nLinkedListStack:    " << elapsedLLS.count() << endl;
 
         cout << endl;
 	}
