@@ -1,6 +1,8 @@
 #include <iostream>
 #include <chrono>
 #include <iomanip>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -265,43 +267,73 @@ int main()
 
         // Opt 3: Compare
         // Do both in different branches and compare differences.
+        int testMax = 10000;
+		string trialID = "1";
 
-		int testCount = 500000;
+		// File-handling:
+		ofstream arraystack_ofs;
+		string arraystack_filename = "./logs/arraystack_log" + trialID + ".csv";
+		// arraystack_ofs.open(arraystack_filename);
 
-		ArrayStack<int> arrStack(1000, 100);
-        auto startAS = chrono::high_resolution_clock::now();
-		for (int i = 1; i <= testCount; i++)
-		{
-		    arrStack.push(i);
-		}
-        auto finishAS = chrono::high_resolution_clock::now();
+		ofstream doublingarraystack_ofs;
+		string doublingarraystack_filename = "./logs/doublingarraystack_log" + trialID + ".csv";
+		// doublingarraystack_ofs.open(doublingarraystack_filename);
 
-		DoublingArrayStack<double> doubStack(100);
-        auto startDAS = chrono::high_resolution_clock::now();
-		for (int i = 1; i <= testCount; i++)
-		{
-		    doubStack.push(i);
-		}
-        auto finishDAS = chrono::high_resolution_clock::now();
+		ofstream linkedliststack_ofs;
+		string linkedliststack_filename = "./logs/linkedliststack_log" + trialID + ".csv";
+		// linkedliststack_ofs.open(linkedliststack_filename);
 
-		LinkedListStack<int> llStack;
-        auto startLLS = chrono::high_resolution_clock::now();
-		for (int i = 1; i <= testCount; i++)
-		{
-		    llStack.push(i);
-		}
-        auto finishLLS = chrono::high_resolution_clock::now();
+        for (int testCount = 0; testCount <= testMax; testCount += 1000)
+        {
+            ArrayStack<int> arrStack(1000, 100);
+            auto startAS = chrono::high_resolution_clock::now();
+            for (int i = 1; i <= testCount; i++)
+            {
+                arrStack.push(i);
+            }
+            auto finishAS = chrono::high_resolution_clock::now();
 
-        // convert nanoseconds (1e-9) to seconds
-        double secondsDenominator = 1000000000; 
-        auto elapsedAS = (finishAS - startAS)/secondsDenominator;
-        auto elapsedDAS = (finishDAS - startDAS)/secondsDenominator;
-        auto elapsedLLS = (finishLLS - startLLS)/secondsDenominator;
-		cout << "\nArrayStack:         " << elapsedAS.count() << endl;
-		cout << "\nDoublingArrayStack: " << elapsedDAS.count() << endl;
-		cout << "\nLinkedListStack:    " << elapsedLLS.count() << endl;
+            DoublingArrayStack<double> doubStack(100);
+            auto startDAS = chrono::high_resolution_clock::now();
+            for (int i = 1; i <= testCount; i++)
+            {
+                doubStack.push(i);
+            }
+            auto finishDAS = chrono::high_resolution_clock::now();
 
-        cout << endl;
+            LinkedListStack<int> llStack;
+            auto startLLS = chrono::high_resolution_clock::now();
+            for (int i = 1; i <= testCount; i++)
+            {
+                llStack.push(i);
+            }
+            auto finishLLS = chrono::high_resolution_clock::now();
+
+            // convert nanoseconds (1e-9) to seconds
+            double millisecondsDenominator = 1000000; 
+            auto elapsedAS = (finishAS - startAS)/millisecondsDenominator;
+            auto elapsedDAS = (finishDAS - startDAS)/millisecondsDenominator;
+            auto elapsedLLS = (finishLLS - startLLS)/millisecondsDenominator;
+
+            // Console log:
+            // cout << "\nArrayStack:         " << elapsedAS.count() << endl;
+            // cout << "\nDoublingArrayStack: " << elapsedDAS.count() << endl;
+            // cout << "\nLinkedListStack:    " << elapsedLLS.count() << endl;
+            // cout << endl;
+
+            // CSV log:
+            arraystack_ofs.open(arraystack_filename, ios::app);
+            arraystack_ofs << testCount << "," << elapsedAS.count() << "\n";
+			arraystack_ofs.close();
+
+            doublingarraystack_ofs.open(doublingarraystack_filename, ios::app);
+            doublingarraystack_ofs << testCount << "," << elapsedDAS.count() << "\n";
+			doublingarraystack_ofs.close();
+
+            linkedliststack_ofs.open(linkedliststack_filename, ios::app);
+            linkedliststack_ofs << testCount << "," << elapsedLLS.count() << "\n";
+			linkedliststack_ofs.close();
+        }
 	}
 	catch (const exception& e)
 	{
