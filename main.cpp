@@ -18,7 +18,7 @@ int main()
 	// Extra Credit: alternate structures and analysis
 	try
 	{
-        int testMax = 10000;
+    int testMax = 10000;
 		string trialID = "1";
 
 		// File-handling:
@@ -34,7 +34,7 @@ int main()
 		string linkedliststack_filename = "./logs/linkedliststack_log" + trialID + ".csv";
 		// linkedliststack_ofs.open(linkedliststack_filename);
 
-        for (int testCount = 0; testCount <= testMax; testCount += 1000)
+    for (int testCount = 0; testCount <= testMax; testCount += 1000)
         {
             ArrayStack<int> arrStack(1000, 100);
             auto startAS = chrono::high_resolution_clock::now();
@@ -84,6 +84,7 @@ int main()
             linkedliststack_ofs.open(linkedliststack_filename, ios::app);
             linkedliststack_ofs << testCount << "," << elapsedLLS.count() << "\n";
 			linkedliststack_ofs.close();
+
 
         }
         cout << "Success.\n";
