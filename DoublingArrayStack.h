@@ -1,3 +1,8 @@
+#ifndef DOUBLING_ARRAY_STACK_H
+#define DOUBLING_ARRAY_STACK_H 
+
+#include "Stack.h"
+#include "Exception.h"
 
 template <class T>
 class DoublingArrayStack : public AbstractStack<T>
@@ -59,3 +64,5 @@ public:
 		stack[topIndex] = e;
 	}
 };
+
+#endif

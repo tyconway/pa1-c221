@@ -1,3 +1,8 @@
+#ifndef LINKED_LIST_STACK_H
+#define LINKED_LIST_STACK_H
+
+#include "Stack.h"
+#include "Exception.h"
 
 template <class T>
 struct Node
@@ -85,3 +90,5 @@ public:
 		count += 1;
 	}
 };
+
+#endif

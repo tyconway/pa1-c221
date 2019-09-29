@@ -5,9 +5,9 @@
 #include <string>
 #include "Stack.h"
 #include "Exception.h"
-#include "ArrayStack.cpp"
-#include "DoublingArrayStack.cpp"
-#include "LinkedListStack.cpp"
+#include "ArrayStack.h"
+#include "DoublingArrayStack.h"
+#include "LinkedListStack.h"
 
 using namespace std;
 

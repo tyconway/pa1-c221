@@ -1,4 +1,9 @@
-// Source Code
+#ifndef ARRAY_STACK_H
+#define ARRAY_STACK_H
+
+#include "Stack.h"
+#include "Exception.h"
+
 template <class T>
 class ArrayStack : public AbstractStack<T>
 {
@@ -62,3 +67,5 @@ public:
 		stack[topIndex] = e;
 	}
 };
+
+#endif
