@@ -18,27 +18,32 @@ int main()
 	// Extra Credit: alternate structures and analysis
 	try
 	{
-    int testMax = 10000;
-		string trialID = "1";
+        int maxPushes = 50000;
+        int logInterval = 1000;
+        string trialID = "1";
 
-		// File-handling:
-		ofstream arraystack_ofs;
-		string arraystack_filename = "./logs/arraystack_log" + trialID + ".csv";
-		// arraystack_ofs.open(arraystack_filename);
+    	// File-handling:
+        // The open() and close() clear the previous log each time.
+    	ofstream arraystack_ofs;
+    	string arraystack_filename = "./logs/arraystack_log" + trialID + ".csv";
+    	arraystack_ofs.open(arraystack_filename);
+    	arraystack_ofs.close();
 
-		ofstream doublingarraystack_ofs;
-		string doublingarraystack_filename = "./logs/doublingarraystack_log" + trialID + ".csv";
-		// doublingarraystack_ofs.open(doublingarraystack_filename);
+    	ofstream doublingarraystack_ofs;
+    	string doublingarraystack_filename = "./logs/doublingarraystack_log" + trialID + ".csv";
+    	doublingarraystack_ofs.open(doublingarraystack_filename);
+    	doublingarraystack_ofs.close();
 
-		ofstream linkedliststack_ofs;
-		string linkedliststack_filename = "./logs/linkedliststack_log" + trialID + ".csv";
-		// linkedliststack_ofs.open(linkedliststack_filename);
+    	ofstream linkedliststack_ofs;
+    	string linkedliststack_filename = "./logs/linkedliststack_log" + trialID + ".csv";
+    	linkedliststack_ofs.open(linkedliststack_filename);
+    	linkedliststack_ofs.close();
 
-    for (int testCount = 0; testCount <= testMax; testCount += 1000)
+        for (int testPushes = 0; testPushes <= maxPushes; testPushes += logInterval)
         {
             ArrayStack<int> arrStack(1000, 100);
             auto startAS = chrono::high_resolution_clock::now();
-            for (int i = 1; i <= testCount; i++)
+            for (int i = 1; i <= testPushes; i++)
             {
                 arrStack.push(i);
             }
@@ -46,7 +51,7 @@ int main()
 
             DoublingArrayStack<double> doubStack(100);
             auto startDAS = chrono::high_resolution_clock::now();
-            for (int i = 1; i <= testCount; i++)
+            for (int i = 1; i <= testPushes; i++)
             {
                 doubStack.push(i);
             }
@@ -54,7 +59,7 @@ int main()
 
             LinkedListStack<int> llStack;
             auto startLLS = chrono::high_resolution_clock::now();
-            for (int i = 1; i <= testCount; i++)
+            for (int i = 1; i <= testPushes; i++)
             {
                 llStack.push(i);
             }
@@ -74,18 +79,16 @@ int main()
 
             // CSV log:
             arraystack_ofs.open(arraystack_filename, ios::app);
-            arraystack_ofs << testCount << "," << elapsedAS.count() << "\n";
-			arraystack_ofs.close();
+            arraystack_ofs << testPushes << "," << elapsedAS.count() << "\n";
+            arraystack_ofs.close();
 
             doublingarraystack_ofs.open(doublingarraystack_filename, ios::app);
-            doublingarraystack_ofs << testCount << "," << elapsedDAS.count() << "\n";
-			doublingarraystack_ofs.close();
+            doublingarraystack_ofs << testPushes << "," << elapsedDAS.count() << "\n";
+            doublingarraystack_ofs.close();
 
             linkedliststack_ofs.open(linkedliststack_filename, ios::app);
-            linkedliststack_ofs << testCount << "," << elapsedLLS.count() << "\n";
-			linkedliststack_ofs.close();
-
-
+            linkedliststack_ofs << testPushes << "," << elapsedLLS.count() << "\n";
+            linkedliststack_ofs.close();
         }
         cout << "Success.\n";
 	}
