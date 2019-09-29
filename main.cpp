@@ -9,6 +9,10 @@
 #include "DoublingArrayStack.h"
 #include "LinkedListStack.h"
 
+
+// bad_alloc: try destructing each stack after it's done
+
+
 using namespace std;
 
 void log_csv(string filename, ofstream& ofs, chrono::duration<double, nano> elapsed, int currPushCount)
@@ -48,11 +52,11 @@ int main()
     	linkedliststack_ofs.open(linkedliststack_filename);
     	linkedliststack_ofs.close();
 
-        ArrayStack<int> arrStack(1000, 100);
+        ArrayStack<int> *arrStack = new ArrayStack<int>(1000, 100);
         auto start = chrono::high_resolution_clock::now();
         for (int i = 0; i <= pushes; i++)
         {
-            arrStack.push(i);
+            arrStack->push(i);
             if (i % logInterval == 0) 
             { 
                 auto curr = chrono::high_resolution_clock::now();
@@ -60,12 +64,13 @@ int main()
                 log_csv(arraystack_filename, arraystack_ofs, elapsed, i); 
             }
         }
+        delete arrStack;
 
-        DoublingArrayStack<double> doubStack(100);
+        DoublingArrayStack<double> *doubStack = new DoublingArrayStack<double>(100);
         start = chrono::high_resolution_clock::now();
         for (int i = 0; i <= pushes; i++)
         {
-            doubStack.push(i);
+            doubStack->push(i);
             if (i % logInterval == 0) 
             { 
                 auto curr = chrono::high_resolution_clock::now();
@@ -73,12 +78,13 @@ int main()
                 log_csv(doublingarraystack_filename, doublingarraystack_ofs, elapsed, i); 
             }
         }
+        delete doubStack;
 
-        LinkedListStack<int> llStack;
+        LinkedListStack<int> *llStack = new LinkedListStack<int>();
         start = chrono::high_resolution_clock::now();
         for (int i = 0; i <= pushes; i++)
         {
-            llStack.push(i);
+            llStack->push(i);
             if (i % logInterval == 0) 
             { 
                 auto curr = chrono::high_resolution_clock::now();
@@ -86,6 +92,7 @@ int main()
                 log_csv(linkedliststack_filename, linkedliststack_ofs, elapsed, i); 
             }
         }
+        delete llStack;
 
         // Console log:
         // cout << "\nArrayStack:         " << elapsedAS.count() << endl;
