@@ -11,6 +11,15 @@
 
 using namespace std;
 
+void log_csv(string filename, ofstream& ofs, chrono::duration<double, nano> elapsed, int currPushCount)
+{
+    double millisecondsDenominator = 1000000; 
+    auto elapsed_seconds = elapsed/millisecondsDenominator;
+    ofs.open(filename, ios::app);
+    ofs << currPushCount << "," << elapsed_seconds.count() << "\n";
+    ofs.close();
+}
+
 int main()
 {
 	// Request: reduce CPU use (vagrant?)
@@ -18,7 +27,7 @@ int main()
 	// Extra Credit: alternate structures and analysis
 	try
 	{
-        int maxPushes = 50000;
+        int pushes = 50000;
         int logInterval = 1000;
         string trialID = "1";
 
@@ -39,57 +48,51 @@ int main()
     	linkedliststack_ofs.open(linkedliststack_filename);
     	linkedliststack_ofs.close();
 
-        for (int testPushes = 0; testPushes <= maxPushes; testPushes += logInterval)
+        ArrayStack<int> arrStack(1000, 100);
+        auto start = chrono::high_resolution_clock::now();
+        for (int i = 0; i <= pushes; i++)
         {
-            ArrayStack<int> arrStack(1000, 100);
-            auto startAS = chrono::high_resolution_clock::now();
-            for (int i = 1; i <= testPushes; i++)
-            {
-                arrStack.push(i);
+            arrStack.push(i);
+            if (i % logInterval == 0) 
+            { 
+                auto curr = chrono::high_resolution_clock::now();
+                auto elapsed = curr - start;
+                log_csv(arraystack_filename, arraystack_ofs, elapsed, i); 
             }
-            auto finishAS = chrono::high_resolution_clock::now();
-
-            DoublingArrayStack<double> doubStack(100);
-            auto startDAS = chrono::high_resolution_clock::now();
-            for (int i = 1; i <= testPushes; i++)
-            {
-                doubStack.push(i);
-            }
-            auto finishDAS = chrono::high_resolution_clock::now();
-
-            LinkedListStack<int> llStack;
-            auto startLLS = chrono::high_resolution_clock::now();
-            for (int i = 1; i <= testPushes; i++)
-            {
-                llStack.push(i);
-            }
-            auto finishLLS = chrono::high_resolution_clock::now();
-
-            // convert nanoseconds (1e-9) to seconds
-            double millisecondsDenominator = 1000000; 
-            auto elapsedAS = (finishAS - startAS)/millisecondsDenominator;
-            auto elapsedDAS = (finishDAS - startDAS)/millisecondsDenominator;
-            auto elapsedLLS = (finishLLS - startLLS)/millisecondsDenominator;
-
-            // Console log:
-            // cout << "\nArrayStack:         " << elapsedAS.count() << endl;
-            // cout << "\nDoublingArrayStack: " << elapsedDAS.count() << endl;
-            // cout << "\nLinkedListStack:    " << elapsedLLS.count() << endl;
-            // cout << endl;
-
-            // CSV log:
-            arraystack_ofs.open(arraystack_filename, ios::app);
-            arraystack_ofs << testPushes << "," << elapsedAS.count() << "\n";
-            arraystack_ofs.close();
-
-            doublingarraystack_ofs.open(doublingarraystack_filename, ios::app);
-            doublingarraystack_ofs << testPushes << "," << elapsedDAS.count() << "\n";
-            doublingarraystack_ofs.close();
-
-            linkedliststack_ofs.open(linkedliststack_filename, ios::app);
-            linkedliststack_ofs << testPushes << "," << elapsedLLS.count() << "\n";
-            linkedliststack_ofs.close();
         }
+
+        DoublingArrayStack<double> doubStack(100);
+        start = chrono::high_resolution_clock::now();
+        for (int i = 0; i <= pushes; i++)
+        {
+            doubStack.push(i);
+            if (i % logInterval == 0) 
+            { 
+                auto curr = chrono::high_resolution_clock::now();
+                auto elapsed = curr - start;
+                log_csv(doublingarraystack_filename, doublingarraystack_ofs, elapsed, i); 
+            }
+        }
+
+        LinkedListStack<int> llStack;
+        start = chrono::high_resolution_clock::now();
+        for (int i = 0; i <= pushes; i++)
+        {
+            llStack.push(i);
+            if (i % logInterval == 0) 
+            { 
+                auto curr = chrono::high_resolution_clock::now();
+                auto elapsed = curr - start;
+                log_csv(linkedliststack_filename, linkedliststack_ofs, elapsed, i); 
+            }
+        }
+
+        // Console log:
+        // cout << "\nArrayStack:         " << elapsedAS.count() << endl;
+        // cout << "\nDoublingArrayStack: " << elapsedDAS.count() << endl;
+        // cout << "\nLinkedListStack:    " << elapsedLLS.count() << endl;
+        // cout << endl;
+
         cout << "Success.\n";
 	}
 	catch (const exception& e)
