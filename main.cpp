@@ -9,10 +9,6 @@
 #include "DoublingArrayStack.h"
 #include "LinkedListStack.h"
 
-
-// bad_alloc: try destructing each stack after it's done
-
-
 using namespace std;
 
 void log_csv(string filename, ofstream& ofs, chrono::duration<double, nano> elapsed, int currPushCount)
@@ -31,9 +27,9 @@ int main()
 	// Extra Credit: alternate structures and analysis
 	try
 	{
-        int pushes = 50000;
-        int logInterval = 1000;
-        string trialID = "1";
+        int pushes = 1000000;
+        int logInterval = 10000;
+        string trialID = "3";
 
     	// File-handling:
         // The open() and close() clear the previous log each time.

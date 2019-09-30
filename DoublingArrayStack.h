@@ -53,6 +53,7 @@ public:
 			{
 				newStack[index] = stack[index];
 			}
+            delete[] stack;
 			stack = newStack;
 			capacity *= 2;
 			topIndex += 1;
