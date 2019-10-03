@@ -30,7 +30,7 @@ public:
 	}
 	int size()
 	{
-		return capacity;
+		return topIndex + 1;
 	}
 	T top()
 	{

@@ -22,14 +22,69 @@ void log_csv(string filename, ofstream& ofs, chrono::duration<double, nano> elap
 
 int main()
 {
-	// Request: reduce CPU use (vagrant?)
-	// Output: demonstrate basic functionality
-	// Extra Credit: alternate structures and analysis
 	try
 	{
-        int pushes = 1000000;
+        // OUTPUT DEMO
+        cout << "Hello!\n"
+             << "The following is a basic demonstration of\n"
+             << "each implementation's funcionality.\n";
+
+        // Constant
+        cout << "\nConstant Array Stack:\n";
+        ArrayStack<int> *cs = new ArrayStack<int>(2,1);
+        cout << "Empty: " << boolalpha << cs->isEmpty() << endl;
+        cout << "Push(1)\n";
+        cs->push(1);
+        cout << "Push(2)\n";
+        cs->push(2);
+        cout << "Empty: " << boolalpha << cs->isEmpty() << endl;
+        cout << "Size: " << cs->size() << endl;
+        cout << "Push(3)\n";
+        cs->push(3);
+        cout << "Size: " << cs->size() << endl;
+        cout << "Pop()" << endl;
+        cs->pop();
+        cout << "Size: " << cs->size() << endl;
+
+        // Doubling
+        cout << "\nDoubling Array Stack:\n";
+        DoublingArrayStack<double> *ds = new DoublingArrayStack<double>(2);
+        cout << "Empty: " << boolalpha << ds->isEmpty() << endl;
+        cout << "Push(1)\n";
+        ds->push(1);
+        cout << "Push(2)\n";
+        ds->push(2);
+        cout << "Empty: " << boolalpha << ds->isEmpty() << endl;
+        cout << "Size: " << ds->size() << endl;
+        cout << "Push(3)\n";
+        ds->push(3);
+        cout << "Size: " << ds->size() << endl;
+        cout << "Pop()" << endl;
+        ds->pop();
+        cout << "Size: " << ds->size() << endl;
+
+        // Linked list
+        cout << "\nLinked List Stack:\n";
+        LinkedListStack<double> *ls = new LinkedListStack<double>();
+        cout << "Empty: " << boolalpha << ls->isEmpty() << endl;
+        cout << "Push(1)\n";
+        ls->push(1);
+        cout << "Push(2)\n";
+        ls->push(2);
+        cout << "Empty: " << boolalpha << ls->isEmpty() << endl;
+        cout << "Size: " << ls->size() << endl;
+        cout << "Push(3)\n";
+        ls->push(3);
+        cout << "Size: " << ls->size() << endl;
+        cout << "Pop()" << endl;
+        ls->pop();
+        cout << "Size: " << ls->size() << endl;
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // EXPERIMENT
+        int pushes = 0; // CHANGE ME
         int logInterval = 10000;
-        string trialID = "3";
+        string trialID = "1";
 
     	// File-handling:
         // The open() and close() clear the previous log each time.
@@ -96,7 +151,7 @@ int main()
         // cout << "\nLinkedListStack:    " << elapsedLLS.count() << endl;
         // cout << endl;
 
-        cout << "Success.\n";
+        // cout << "Success.\n";
 	}
 	catch (const exception& e)
 	{
